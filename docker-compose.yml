@@ -10,11 +10,11 @@ networks:
 
 services:
   proget:
-    image: phoenixtzuyun/proget:5.3.4
+    image: phoenixtzuyun/proget:5.3.6
     restart: always
     environment:
       - PROGET_DB_TYPE=SqlServer
-      - "PROGET_DATABASE=Data Source=proget-sql;Initial Catalog=ProGet;User ID=sa;Password=aa123456"
+      - "PROGET_DATABASE=Data Source=proget_db;Initial Catalog=ProGet;User ID=sa;Password=aa123456"
     volumes:
       - packages:/var/proget/packages
       - extensions:/var/proget/extensions
@@ -23,7 +23,7 @@ services:
     networks:
       - proget
     depends_on:
-      - proget-sql
+      - proget_db
     # healthcheck:
     #   test: curl --write-out %{http_code} -s --output /dev/null localhost | grep 200 || exit 1
     #   interval: 5s
@@ -34,6 +34,7 @@ services:
   proget_db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     restart: always
+    user: root
     volumes:
       - database:/var/opt/mssql
     environment:
@@ -42,5 +43,5 @@ services:
     restart: unless-stopped
     networks:
       - proget
-    ports:
-      - 1433:1433
+    # ports:
+    #   - 1433:1433

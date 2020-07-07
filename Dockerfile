@@ -2,9 +2,13 @@ FROM mono
 
 EXPOSE 80
 
-ARG PROGET_VERSION=5.3.5
+ARG PROGET_VERSION=5.3.6
 
-RUN apt-get update && apt-get install xz-utils
+RUN apt-get update && \
+    apt-get install -y xz-utils && \
+    # Cleanup the Dockerfile
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists
 
 RUN mkdir -p /usr/local/proget && curl -sSL "https://s3.amazonaws.com/cdn.inedo.com/downloads/proget-linux/ProGet.$PROGET_VERSION.tar.xz" | tar xJC /usr/local/proget
 

@@ -19,7 +19,7 @@ services:
       - packages:/var/proget/packages
       - extensions:/var/proget/extensions
     ports:
-      - 80:80
+      - 8080:80
     networks:
       - proget
     depends_on:
@@ -31,8 +31,11 @@ services:
     #   retries: 3
     #   start_period: 30s
 
-  proget-sql:
+  proget_db:
     image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    volumes:
+      - database:/var/opt/mssql
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=aa123456
